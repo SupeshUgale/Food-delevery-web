@@ -1,7 +1,7 @@
 import React from 'react'
 import './Exploremenu.css'
 import { menu_list } from '../../assets/assets'
-const Exploremenu = ({category,setCategory}) => {
+const ExploreMenu = ({category,setCategory}) => {
      
     return (
     <div className='explore-menu' id='explore-menu'>
@@ -26,4 +26,4 @@ const Exploremenu = ({category,setCategory}) => {
   )
 }
 
-export default Exploremenu
+export default ExploreMenu;

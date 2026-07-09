@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import './Home.css';
 import Header from '../../Components/Header/Header.jsx';
-import Exploremenu from '../../Components/ExploreMenu/ExploreMenu.jsx';
+import ExploreMenu from '../../Components/ExploreMenu/ExploreMenu.jsx';
+
 import Fooddisplay from '../../Components/Fooddisplay/Fooddisplay.jsx';
 import AppDownload from '../../Components/AppDownload/AppDownload.jsx';
 
@@ -10,7 +11,8 @@ const Home = () => {
     return (
     <div>
         <Header/>
-        <Exploremenu category={category} setCategory={setCategory}/>
+        <ExploreMenu category={category} setCategory={setCategory}/>
+
         <Fooddisplay  category={category}/>
         <AppDownload></AppDownload>
     </div>

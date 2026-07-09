@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { food_list } from "../assets/assets";
 
 // Create context outside the component
  export const StoreContext = createContext(null);
@@ -9,7 +10,7 @@ import axios from "axios";
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [foodList, setFoodList] = useState([]);
-  const url = import.meta.env.VITE_BACKEND_URL || "https://food-delivery-website-zwz8.onrender.com";
+  const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   // Add item to cart
   const addToCart = async (itemId) => {
@@ -44,6 +45,7 @@ import axios from "axios";
 
   // Calculate total cart amount
   const getTotalCartAmount = () => {
+    if (!cartItems) return 0;
     return Object.entries(cartItems).reduce((total, [itemId, quantity]) => {
       if (quantity > 0) {
         const itemInfo = foodList.find(product => product._id === itemId);
@@ -57,9 +59,15 @@ import axios from "axios";
   const fetchFoodList = async () => {
     try {
       const response = await axios.get(`${url}/api/food/list`);
-      setFoodList(response.data.data);
+      if (response.data && response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        setFoodList(response.data.data);
+      } else {
+        console.warn("Backend food list is empty or success is false. Falling back to local food list.");
+        setFoodList(food_list);
+      }
     } catch (error) {
-      console.error("Error fetching food list:", error);
+      console.error("Error fetching food list, falling back to local food list:", error);
+      setFoodList(food_list);
     }
   };
 
@@ -71,7 +79,7 @@ import axios from "axios";
         {},
         { headers: { token } }
       );
-      setCartItems(response.data.success ? response.data.cartData : {});
+      setCartItems(response.data.success && response.data.cartData ? response.data.cartData : {});
     } catch (error) {
       console.error("Error loading cart:", error);
       setCartItems({});
@@ -90,7 +98,11 @@ import axios from "axios";
 
   // Load cart when token changes
   useEffect(() => {
-    if (token) loadCartData(token);
+    if (token) {
+      loadCartData(token);
+    } else {
+      setCartItems({});
+    }
   }, [token]);
 
   // Context value

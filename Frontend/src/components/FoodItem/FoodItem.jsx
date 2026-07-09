@@ -14,8 +14,8 @@ const FoodItem = ({id,name,price,description,image}) => {
     // also added the count to cart functionality with usestate using plus and minus icon using context
     <div className='food-item'>
         <div className='food-item-img-container' >
-            {/*adding route to the images so they can display from db*/}
-            <img className='food-item-iamge'src={url+"/images/"+image}></img>
+            {/*adding route to the images so they can display from db or fallback to local assets*/}
+            <img className='food-item-iamge' src={(typeof image === 'string' && (image.startsWith('/') || image.startsWith('data:') || image.startsWith('http') || image.includes('blob:'))) ? image : url + "/images/" + image}></img>
            {!(cartItems?.[id] > 0)
   ? <img className="add" onClick={() => addToCart(id)} src={assets.add_icon_white} />
   : <div className='food-item-counter'>

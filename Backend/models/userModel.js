@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema(
   { minimize: false }
 );
 
-const userModel =
+import createModelWrapper from "../config/dbMock.js";
+
+const userModelReal =
   mongoose.models.user || mongoose.model("user", userSchema);
+
+const userModel = createModelWrapper("user", userModelReal);
 
 export default userModel;

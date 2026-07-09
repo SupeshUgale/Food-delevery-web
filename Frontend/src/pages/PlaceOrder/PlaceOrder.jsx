@@ -4,7 +4,7 @@ import { StoreContext } from '../../Context/Storecontext';
 import axios from 'axios';
 
 const Placeorder = () => {
-  const {getTotalcartAmount,token,food_list,cartItems,url}=useContext(StoreContext);
+  const {getTotalcartAmount,token,food_list,cartItems = {},url}=useContext(StoreContext);
   
   //state variables for storing the information of form filled
   const [data, setData] = useState({

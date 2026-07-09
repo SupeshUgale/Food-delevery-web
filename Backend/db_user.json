@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "testuser123",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2b$10$63nkJSt6Z9gpa1bZPB082OjRKi1qSgJi9tU2L7m8FFX6JBDbfAxQO",
+    "role": "user",
+    "cartData": {
+      "1": 1,
+      "2": 1
+    },
+    "createdAt": "2026-07-09T12:39:59.270Z"
+  },
+  {
+    "_id": "32t0osm6z",
+    "createdAt": "2026-07-09T12:44:19.694Z",
+    "name": "Supesh Ugale",
+    "email": "supeshugale31@gmail.com",
+    "password": "$2b$10$yQs7T.bpmjkdYdUYoCei8O0F4m.4.YvNYnxs2Q2zqvPUCKa1rpdEe",
+    "role": "user",
+    "cartData": {}
+  }
+]

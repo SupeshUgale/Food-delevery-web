@@ -14,4 +14,4 @@ export const assets ={
     parcel_icon
 }
 
-export const url = import.meta.env.VITE_BACKEND_URL || "https://food-delivery-website-zwz8.onrender.com";
+export const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";

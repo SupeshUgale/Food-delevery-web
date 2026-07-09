@@ -28,6 +28,9 @@ const foodSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Food = mongoose.model("Food", foodSchema);
+import createModelWrapper from "../config/dbMock.js";
+
+const FoodReal = mongoose.model("Food", foodSchema);
+const Food = createModelWrapper("food", FoodReal);
 
 export default Food;

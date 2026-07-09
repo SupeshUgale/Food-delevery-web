@@ -1,0 +1,8 @@
+{
+  "name": "food-delivery-project",
+  "version": "1.0.0",
+  "description": "Orchestrator for Frontend, Backend, and Admin services",
+  "scripts": {
+    "dev": "npx concurrently --kill-others \"npm run dev --prefix Backend\" \"npm run dev --prefix Frontend\" \"npm run dev --prefix admin\""
+  }
+}

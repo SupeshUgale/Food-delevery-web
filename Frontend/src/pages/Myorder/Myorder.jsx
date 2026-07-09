@@ -15,10 +15,18 @@ const Myorders = () => {
   const fetchorders = async ()=>{
   /********************* */
   //api for fetching the users orders data from frontend to bakend
-  const response = await axios.post(url+"/api/order/userorders",{},{headers:{token}} );
-  console.log(response);
-  setData(response.data.data);
-  console.log(response.data.data)
+  try {
+    const response = await axios.post(url+"/api/order/userorders",{},{headers:{token}} );
+    if (response.data && response.data.success && Array.isArray(response.data.data)) {
+      setData(response.data.data);
+    } else {
+      console.warn("No orders found or unexpected response:", response.data);
+      setData([]);
+    }
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    setData([]);
+  }
   }
 //on every load fetch the users orderdata
   useEffect(()=>{
@@ -31,25 +39,31 @@ const Myorders = () => {
     <div className='my-orders'>
       <h2>My orders</h2>
       <div className='container'>
-        {data.map((order,index)=>{
-          return(
-            <div key={index} className='my-orders-order'>
-            <img src={assets.parcel_icon}></img>
-            <p>{order.items.map((item,index)=>{
-              if(index===order.items.length-1){
-                return item.name +" X "+item.quantity;
-              }
-              else{
-                return item.name+" X "+item.quantity+", "
-              }
-            })}</p>
-            <p> ₹{order.amount}.00</p>
-            <p>Items:{order.items.length}</p>
-            <p><span>&#x25cf;</span><b>{order.status}</b></p>
-           <button onClick={fetchorders}>Track Order</button>
-            </div>
-          )
-        })}
+        {data.length === 0 ? (
+          <div style={{textAlign:'center', padding:'40px', color:'#777'}}>
+            <p>No orders found. Place an order to see it here!</p>
+          </div>
+        ) : (
+          data.map((order,index)=>{
+            return(
+              <div key={index} className='my-orders-order'>
+              <img src={assets.parcel_icon}></img>
+              <p>{order.items.map((item,index)=>{
+                if(index===order.items.length-1){
+                  return item.name +" X "+(item.quantity||1);
+                }
+                else{
+                  return item.name+" X "+(item.quantity||1)+", "
+                }
+              })}</p>
+              <p> ₹{order.amount}.00</p>
+              <p>Items:{order.items.length}</p>
+              <p><span>&#x25cf;</span><b>{order.status || 'Food Processing'}</b></p>
+             <button onClick={fetchorders}>Track Order</button>
+              </div>
+            )
+          })
+        )}
 
       </div>
 

@@ -49,8 +49,7 @@ const LoginPopup = ({ setShowLogin }) => {
       //"Note: Token is stored in LocalStorage for simplicity. In a production app, I would use HttpOnly cookies to improve security ."
 
       if (response.data.role === "admin") {
-        // redirect to admin app (separate folder on different port or domain)
-        window.location.href = " https://food-delivery-website-admin-evkq.onrender.com"; // change this to your actual admin URL
+        window.location.href = import.meta.env.VITE_ADMIN_URL || "http://localhost:5174";
       } else {
         navigate("/");
       }

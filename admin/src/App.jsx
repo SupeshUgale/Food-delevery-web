@@ -13,7 +13,7 @@ const App = () => {
 //as we using the url in all three pages hence we have defined it as prop in app.jsx 
 // and destructure it in the add,list,ordert
  console.log("HIIIII");
-  const url = import.meta.env.VITE_BACKEND_URL || "https://food-delivery-website-zwz8.onrender.com";
+  const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   
   return (
     <div>

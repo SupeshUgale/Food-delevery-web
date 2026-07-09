@@ -4,24 +4,44 @@ import orderModel from '../models/orderModel.js';
 import userModel from "../models/userModel.js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Check if a real Stripe key is configured
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const isStripeConfigured = stripeKey && stripeKey !== "sk_test_your_stripe_key_here" && stripeKey.startsWith("sk_");
+
+let stripe = null;
+if (isStripeConfigured) {
+  stripe = new Stripe(stripeKey);
+  console.log("✅ Stripe is configured — real payments enabled.");
+} else {
+  console.warn("⚠️  Stripe key not configured. Using mock payment mode for development.");
+}
 
 
 //placing the order from frontend
 
 const placeOrder = async (req,res)=>{
 
-    const frontend_url = "https://food-delivery-website-frontend-5tsd.onrender.com";
+    const frontend_url = process.env.FRONTEND_URL || "http://localhost:5173";
 
     try{
    const newOrder = new orderModel({
     userId:req.userId,
     items:req.body.items,
     adress:req.body.adress,
-    amount:req.body.amount
+    amount:req.body.amount,
+    status: "Food Processing",
+    payment: false,
+    date: new Date().toISOString()
    })
    await newOrder.save();
    await userModel.findByIdAndUpdate(req.userId, {cartData:{}});
+
+  // If Stripe is not configured, use mock payment (redirect directly to success)
+  if (!isStripeConfigured) {
+    console.log("💳 Mock payment: auto-approving order", newOrder._id);
+    const mock_session_url = `${frontend_url}/verify?success=true&orderId=${newOrder._id}`;
+    return res.json({ success: true, session_url: mock_session_url });
+  }
 
   const line_items = req.body.items.map((item) => ({
   price_data: {

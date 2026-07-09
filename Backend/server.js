@@ -1,4 +1,6 @@
 import 'dotenv/config';
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 import express from "express";
 import cors from "cors";
 
@@ -40,18 +42,18 @@ app.get("/", (req, res) => {
 });
 
 /* ======================
-   Start Server ONLY after DB connect
+   Start Server immediately and connect to DB asynchronously
 ====================== */
 const startServer = async () => {
-  try {
-    await connectDB();
+  app.listen(port, () => {
+    console.log(`🚀 Server running on http://localhost:${port}`);
+  });
 
-    app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${port}`);
-    });
+  try {
+    console.log("Connecting to MongoDB...");
+    await connectDB();
   } catch (error) {
-    console.error("❌ Server failed to start:", error);
-    process.exit(1);
+    console.error("❌ MongoDB connection failed:", error.message);
   }
 };
 
